@@ -1,0 +1,42 @@
+# Importing all libraries
+import pandas as pd
+import numpy as np  
+import matplotlib.pyplot as plt  
+%matplotlib inline
+import seaborn as sns
+
+df = pd.read_csv("student_scores - student_scores.csv")
+df.head()
+
+# Plotting the distribution of scores
+df.plot(x='Hours', y='Scores', style='o')  
+plt.title('Hours vs Percentage')  
+plt.xlabel('Hours Studied')  
+plt.ylabel('Percentage Score')  
+plt.show()
+
+X = df.iloc[::-1].values
+y = df.iloc[:, 1].values  
+from sklearn.model_selection import train_test_split  
+X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2, random_state=0) 
+
+from sklearn.linear_model import LinearRegression  
+lr = LinearRegression()  
+lr.fit(X_train, y_train) 
+
+print("Training Done.")
+
+y_pred = lr.predict(X_test)
+
+df2 = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})  
+df2.head()
+
+# You can also test with your own data
+new_input = [[9.25, 9.25]]
+#hours.reshape(1, -1)
+new_pred = lr.predict(new_input)
+print("No of Hours = {}".format(new_input))
+print("Predicted Score = {}".format(new_pred[0]))
+
+from sklearn import metrics  
+print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred)) 
